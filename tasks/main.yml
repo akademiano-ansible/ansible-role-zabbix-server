@@ -35,7 +35,7 @@
 - name: zbx_db
   become: true
   become_user: postgres
-  shell: "set -o pipefail; psql zabbix -c 'select * from users;' || zcat /usr/share/doc/zabbix-server-pgsql/create.sql.gz | psql zabbix"
+  shell: "psql zabbix -c 'select * from users;' || zcat /usr/share/doc/zabbix-server-pgsql/create.sql.gz | psql zabbix"
   register: zbx_db
   changed_when: '"attempt_clock" not in zbx_db.stdout'
 
