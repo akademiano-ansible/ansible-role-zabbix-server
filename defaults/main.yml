@@ -1,2 +1,107 @@
 ---
 # defaults file for egeneralov.zabbix-server
+
+zbx_supported_db:
+  - pgsql
+
+zbx_database: pgsql
+
+zbx_server_conf:
+  - { "k": "DebugLevel", "v": "3" }
+  - { "k": "ListenPort", "v": "10051" }
+  - { "k": "ListenIP", "v": "0.0.0.0" }
+#   - { "k": "User", "v": "zabbix" }
+  - { "k": "DBHost", "v": "127.0.0.1" }
+  - { "k": "DBName", "v": "zabbix" }
+  - { "k": "DBUser", "v": "zabbix" }
+  - { "k": "DBPassword", "v": "zabbix" }
+  - { "k": "DBPort", "v": "5432" }
+#   - { "k": "DBSchema", "v": "" }
+#   - { "k": "DBSocket", "v": "" }
+  - { "k": "SNMPTrapperFile", "v": "/var/log/snmptrap/snmptrap.log" }
+  - { "k": "Timeout", "v": "4" }
+  - { "k": "AlertScriptsPath", "v": "/usr/lib/zabbix/alertscripts" }
+  - { "k": "ExternalScripts", "v": "/usr/lib/zabbix/externalscripts" }
+  - { "k": "FpingLocation", "v": "/usr/bin/fping" }
+  - { "k": "Fping6Location", "v": "/usr/bin/fping6" }
+  - { "k": "LogSlowQueries", "v": "3000" }
+  - { "k": "StatsAllowedIP", "v": "127.0.0.1" }
+  - { "k": "LogFile", "v": "/var/log/zabbix/zabbix_server.log" }
+  - { "k": "LogFileSize", "v": "0" }
+  - { "k": "SocketDir", "v": "/var/run/zabbix" }
+  - { "k": "PidFile", "v": "/var/run/zabbix/zabbix_server.pid" }
+#   - { "k": "SourceIP", "v": "" }
+#   - { "k": "LogType", "v": "file" }
+#   - { "k": "LogFile", "v": "" }
+#   - { "k": "LogFileSize", "v": "1" }
+#   - { "k": "PidFile", "v": "/tmp/zabbix_server.pid" }
+#   - { "k": "SocketDir", "v": "/tmp" }
+#   - { "k": "HistoryStorageURL", "v": "" }
+#   - { "k": "HistoryStorageTypes", "v": "uint,dbl,str,log,text" }
+#   - { "k": "HistoryStorageDateIndex", "v": "0" }
+#   - { "k": "ExportDir", "v": "" }
+#   - { "k": "ExportFileSize", "v": "1G" }
+#   - { "k": "StartPollers", "v": "5" }
+#   - { "k": "StartIPMIPollers", "v": "0" }
+#   - { "k": "StartPreprocessors", "v": "3" }
+#   - { "k": "StartPollersUnreachable", "v": "1" }
+#   - { "k": "StartTrappers", "v": "5" }
+#   - { "k": "StartPingers", "v": "1" }
+#   - { "k": "StartDiscoverers", "v": "1" }
+#   - { "k": "StartHTTPPollers", "v": "1" }
+#   - { "k": "StartTimers", "v": "1" }
+#   - { "k": "StartEscalators", "v": "1" }
+#   - { "k": "StartAlerters", "v": "3" }
+#   - { "k": "JavaGateway", "v": "" }
+#   - { "k": "JavaGatewayPort", "v": "10052" }
+#   - { "k": "StartJavaPollers", "v": "0" }
+#   - { "k": "StartVMwareCollectors", "v": "0" }
+#   - { "k": "VMwareFrequency", "v": "60" }
+#   - { "k": "VMwarePerfFrequency", "v": "60" }
+#   - { "k": "VMwareCacheSize", "v": "8M" }
+#   - { "k": "VMwareTimeout", "v": "10" }
+#   - { "k": "SNMPTrapperFile", "v": "/tmp/zabbix_traps.tmp" }
+#   - { "k": "StartSNMPTrapper", "v": "0" }
+#   - { "k": "ListenIP", "v": "127.0.0.1" }
+#   - { "k": "HousekeepingFrequency", "v": "1" }
+#   - { "k": "MaxHousekeeperDelete", "v": "5000" }
+#   - { "k": "CacheSize", "v": "8M" }
+#   - { "k": "CacheUpdateFrequency", "v": "60" }
+#   - { "k": "StartDBSyncers", "v": "4" }
+#   - { "k": "HistoryCacheSize", "v": "16M" }
+#   - { "k": "HistoryIndexCacheSize", "v": "4M" }
+#   - { "k": "TrendCacheSize", "v": "4M" }
+#   - { "k": "ValueCacheSize", "v": "8M" }
+#   - { "k": "Timeout", "v": "3" }
+#   - { "k": "TrapperTimeout", "v": "300" }
+#   - { "k": "UnreachablePeriod", "v": "45" }
+#   - { "k": "UnavailableDelay", "v": "60" }
+#   - { "k": "UnreachableDelay", "v": "15" }
+#   - { "k": "AlertScriptsPath", "v": "${datadir}/zabbix/alertscripts" }
+#   - { "k": "ExternalScripts", "v": "${datadir}/zabbix/externalscripts" }
+#   - { "k": "FpingLocation", "v": "/usr/sbin/fping" }
+#   - { "k": "Fping6Location", "v": "/usr/sbin/fping6" }
+#   - { "k": "SSHKeyLocation", "v": "" }
+#   - { "k": "LogSlowQueries", "v": "0" }
+#   - { "k": "TmpDir", "v": "/tmp" }
+#   - { "k": "StartProxyPollers", "v": "1" }
+#   - { "k": "ProxyConfigFrequency", "v": "3600" }
+#   - { "k": "ProxyDataFrequency", "v": "1" }
+#   - { "k": "StartLLDProcessors", "v": "2" }
+#   - { "k": "AllowRoot", "v": "0" }
+#   - { "k": "Include", "v": "" }
+#   - { "k": "Include", "v": "/usr/local/etc/zabbix_server.general.conf" }
+#   - { "k": "Include", "v": "/usr/local/etc/zabbix_server.conf.d/" }
+#   - { "k": "Include", "v": "/usr/local/etc/zabbix_server.conf.d/*.conf" }
+#   - { "k": "SSLCertLocation", "v": "${datadir}/zabbix/ssl/certs" }
+#   - { "k": "SSLKeyLocation", "v": "${datadir}/zabbix/ssl/keys" }
+#   - { "k": "SSLCALocation", "v": "" }
+#   - { "k": "StatsAllowedIP", "v": "127.0.0.1,192.168.1.0/24,::1,2001:db8::/32,zabbix.example.com" }
+#   - { "k": "StatsAllowedIP", "v": "" }
+#   - { "k": "LoadModulePath", "v": "${libdir}/modules" }
+#   - { "k": "LoadModule", "v": "" }
+#   - { "k": "TLSCAFile", "v": "" }
+#   - { "k": "TLSCRLFile", "v": "" }
+#   - { "k": "TLSCertFile", "v": "" }
+#   - { "k": "TLSKeyFile", "v": "" }
+  

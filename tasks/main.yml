@@ -1,2 +1,55 @@
 ---
 # tasks file for egeneralov.zabbix-server
+
+- name: "Assert if {{ zbx_database }} is supported by role"
+  assert:
+    that:
+      - "zbx_database in zbx_supported_db"
+    fail_msg: "{{ zbx_database }} is not supported db"
+    success_msg: "Provisioning zabbix-server with {{ zbx_database }} database"
+
+- name: Install zabbix-server
+  apt:
+    name:
+      - "zabbix-server-{{ zbx_database }}"
+      - zabbix-get
+      - zabbix-sender
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Install postgresql
+  import_role:
+    name: egeneralov.postgresql
+  vars:
+    pgdg_users:
+      - user: zabbix
+        password: zabbix
+        databases:
+          - zabbix
+    pgdg_databases:
+      - name: zabbix
+        owner: zabbix
+  when: zbx_database == "pgsql"
+  register: zbx_db
+
+- name: zbx_db
+  become: true
+  become_user: postgres
+  shell: "psql zabbix -c 'select * from users;' || zcat /usr/share/doc/zabbix-server-pgsql/create.sql.gz | psql zabbix"
+  register: zbx_db
+  changed_when: '"attempt_clock" not in zbx_db.stdout'
+
+- name: zabbix_server.conf
+  lineinfile:
+    path: "/etc/zabbix/zabbix_server.conf"
+    regexp: '#?{{ item.k }} =.*'
+    line: '{{ item.k }} = {{ item.v }}'
+    state: "{{ item.state | default('present') }}"
+  with_items: "{{ zbx_server_conf }}"
+  register: zbx_conf
+
+- name: Restart zabbix-server
+  systemd:
+    name: "zabbix-server.service"
+    state: restarted
+  when: zbx_conf is changed or zbx_db is changed
