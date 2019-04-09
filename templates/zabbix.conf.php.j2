@@ -1,0 +1,19 @@
+<?php
+// Zabbix GUI configuration file.
+global $DB;
+
+$DB['TYPE']     = 'POSTGRESQL';
+$DB['SERVER']   = '127.0.0.1';
+$DB['PORT']     = '0';
+$DB['DATABASE'] = '{{ egeneralov.postgresql.pgdg_users[0].database }}';
+$DB['USER']     = '{{ egeneralov.postgresql.pgdg_users[0].user }}';
+$DB['PASSWORD'] = '{{ egeneralov.postgresql.pgdg_users[0].password }}';
+
+// Schema name. Used for IBM DB2 and PostgreSQL.
+$DB['SCHEMA'] = '';
+
+$ZBX_SERVER      = '{{ egeneralov.nginx.vhosts[0].domain }}';
+$ZBX_SERVER_PORT = '10051';
+$ZBX_SERVER_NAME = '{{ egeneralov.nginx.vhosts[0].domain }}';
+
+$IMAGE_FORMAT_DEFAULT = IMAGE_FORMAT_PNG;

@@ -104,4 +104,58 @@ zbx_server_conf:
 #   - { "k": "TLSCRLFile", "v": "" }
 #   - { "k": "TLSCertFile", "v": "" }
 #   - { "k": "TLSKeyFile", "v": "" }
-  
+
+egeneralov:
+  nginx:
+    vhosts:
+      - domain: "{{ groups['zabbix-server'] }}"
+        ssl: false
+        rewrite_ssl: false
+        rewrite_www: false
+        root: /usr/share/zabbix/
+        index: "index.php index.html"
+        locations:
+          - path: /
+            type: static
+            index: "index.php index.html"
+            try_files: "$uri $uri/ @fallback"
+          - path: "@fallback"
+            type: static
+            rewrite: "^(.*)$ /index.php?$args last"
+          - path: '~ \.php$'
+            type: fastcgi
+            try_files: "$uri = 404"
+            fastcgi_param: "SCRIPT_FILENAME $document_root$fastcgi_script_name"
+            fastcgi_pass:
+              - unix:/var/run/php/php7.2-fpm.sock
+  ansible_php_7_2:
+    php_ini:
+      - { "k": "date.timezone", "v": "Etc/UTC" }
+      - { "k": "max_execution_time", "v": "300" }
+      - { "k": "memory_limit", "v": "128M" }
+      - { "k": "post_max_size", "v": "16M" }
+      - { "k": "upload_max_filesize", "v": "16M" }
+      - { "k": "max_input_time", "v": "300" }
+
+      - { "k": "error_reporting", "v": "E_ALL" }
+      - { "k": "display_errors", "v": "Off" }
+      - { "k": "display_startup_errors", "v": "Off" }
+      - { "k": "log_errors", "v": "On" }
+    pool:
+      www:
+        user: "www-data"
+        group: "www-data"
+        listen: "/run/php/php7.2-fpm.sock"
+        listen.owner: "www-data"
+        listen.group: "www-data"
+        listen.mode: "0666"
+        pm: "dynamic"
+        pm.max_children: "5"
+        pm.start_servers: "2"
+        pm.min_spare_servers: "1"
+        pm.max_spare_servers: "3"
+  postgresql:
+    pgdg_users:
+      - user: zabbix
+        password: zabbix
+        database: zabbix

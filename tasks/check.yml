@@ -1,0 +1,25 @@
+---
+
+- name: install netcat
+  apt:
+    name: netcat
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: "check 80 port"
+  shell: "echo '1' | nc -v 127.0.0.1 80"
+  register: cmd
+  failed_when: false
+  changed_when: false
+
+- name: "fail if some application (not nginx) binded to 80 port"
+  fail:
+    msg: "some application (not nginx) binded to 80 port!"
+  when: 'cmd.rc == 0 and "nginx" not in cmd.stdout'
+
+- name: "Assert if {{ zbx_database }} is supported by role"
+  assert:
+    that:
+      - "zbx_database in zbx_supported_db"
+    fail_msg: "{{ zbx_database }} is not supported db"
+    success_msg: "Provisioning zabbix-server with {{ zbx_database }} database"

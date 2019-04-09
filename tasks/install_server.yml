@@ -1,0 +1,78 @@
+---
+
+- name: Install zabbix-server
+  apt:
+    name:
+      - "zabbix-server-{{ zbx_database }}"
+      - zabbix-get
+      - zabbix-sender
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Install postgresql
+  include_role:
+    name: egeneralov.postgresql
+  vars:
+    pgdg_users: "{{ egeneralov.postgresql.pgdg_users }}"
+    pgdg_databases: "{{ egeneralov.postgresql.pgdg_databases }}"
+  when: zbx_database == "pgsql"
+  register: zbx_db
+
+
+
+- name: init zabbix database
+  become: true
+  become_user: postgres
+  shell: "psql zabbix -c 'select * from users;' || zcat /usr/share/doc/zabbix-server-pgsql/create.sql.gz | psql zabbix"
+  register: zbx_db
+  changed_when: '"attempt_clock" not in zbx_db.stdout'
+
+- name: create DB users
+  become: true
+  become_user: postgres
+  postgresql_user:
+    name: "{{ item.user }}"
+    password: "{{ item.password }}"
+    state: "{{ item.state | default('present') }}"
+    db: "{{ item.database | default(omit) }}"
+  with_items: "{{ egeneralov.postgresql.pgdg_users }}"
+
+- name: DB permissions
+  postgresql_privs:
+    db: postgres
+    privs: "{{ item.privs | default('ALL') }}"
+    type: database
+    obj: "{{ item.database }}"
+    role: "{{ item.user }}"
+    state: "{{ item.state | default('present') }}"
+  become: true
+  become_user: postgres
+  with_items: "{{ egeneralov.postgresql.pgdg_users }}"
+
+- name: in-DB permissions
+  postgresql_privs:
+    database: "{{ item.database }}"
+    roles: "{{ item.user }}"
+    objs: ALL_IN_SCHEMA
+    privs: "{{ item.privs | default('ALL') }}"
+    state: "{{ item.state | default('present') }}"
+  become: true
+  become_user: postgres
+  with_items: "{{ egeneralov.postgresql.pgdg_users }}"
+
+
+
+- name: zabbix_server.conf
+  lineinfile:
+    path: "/etc/zabbix/zabbix_server.conf"
+    regexp: '#?{{ item.k }} =.*'
+    line: '{{ item.k }} = {{ item.v }}'
+    state: "{{ item.state | default('present') }}"
+  with_items: "{{ zbx_server_conf }}"
+  register: zbx_conf
+
+- name: Restart zabbix-server
+  systemd:
+    name: "zabbix-server.service"
+    state: restarted
+  when: zbx_conf is changed or zbx_db is changed

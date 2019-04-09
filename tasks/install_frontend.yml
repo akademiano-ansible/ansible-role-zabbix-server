@@ -1,0 +1,26 @@
+---
+
+- name: Install php 7.2
+  include_role:
+    name: egeneralov.ansible_php_7_2
+  vars:
+    php_ini: "{{ egeneralov.ansible_php_7_2.php_ini }}"
+    pool: "{{ egeneralov.ansible_php_7_2.pool }}"
+
+- name: install frontend
+  apt:
+    name:
+      - "zabbix-frontend-php"
+    install_recommends: no
+
+- name: disable apache
+  systemd:
+    name: apache2
+    state: stopped
+    enabled: no
+
+- name: Install nginx
+  include_role:
+    name: egeneralov.nginx
+  vars:
+    vhosts: "{{ egeneralov.nginx.vhosts }}"
