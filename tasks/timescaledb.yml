@@ -1,0 +1,51 @@
+---
+
+- name: Install timescaledb
+  include_role:
+    name: egeneralov.timescaledb
+  vars:
+    pgdg_users: "{{ egeneralov.postgresql.pgdg_users }}"
+
+
+
+
+- name: init zabbix database
+  become: true
+  become_user: postgres
+  shell: "psql zabbix -c 'select * from users;' || zcat /usr/share/doc/zabbix-server-pgsql/timescaledb.sql.gz | psql  {{ egeneralov.postgresql.pgdg_users[0].database }}"
+  register: zbx_db
+  changed_when: '"attempt_clock" not in zbx_db.stdout'
+
+- name: create DB users
+  become: true
+  become_user: postgres
+  postgresql_user:
+    name: "{{ item.user }}"
+    password: "{{ item.password }}"
+    state: "{{ item.state | default('present') }}"
+    db: "{{ item.database | default(omit) }}"
+  with_items: "{{ egeneralov.postgresql.pgdg_users }}"
+
+- name: DB permissions
+  postgresql_privs:
+    db: postgres
+    privs: "{{ item.privs | default('ALL') }}"
+    type: database
+    obj: "{{ item.database }}"
+    role: "{{ item.user }}"
+    state: "{{ item.state | default('present') }}"
+  become: true
+  become_user: postgres
+  with_items: "{{ egeneralov.postgresql.pgdg_users }}"
+
+- name: in-DB permissions
+  postgresql_privs:
+    database: "{{ item.database }}"
+    roles: "{{ item.user }}"
+    objs: ALL_IN_SCHEMA
+    privs: "{{ item.privs | default('ALL') }}"
+    state: "{{ item.state | default('present') }}"
+  become: true
+  become_user: postgres
+  with_items: "{{ egeneralov.postgresql.pgdg_users }}"
+

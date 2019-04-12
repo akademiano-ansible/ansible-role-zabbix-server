@@ -3,8 +3,9 @@
 
 zbx_supported_db:
   - pgsql
+  - timescaledb
 
-zbx_database: pgsql
+zbx_database: timescaledb
 
 zbx_server_conf:
   - { "k": "DebugLevel", "v": "3" }
@@ -159,3 +160,9 @@ egeneralov:
       - user: zabbix
         password: zabbix
         database: zabbix
+#   timescaledb:
+#     pgdg_users:
+#       - user: zabbix
+#         password: zabbix
+#         database: zabbix
+
