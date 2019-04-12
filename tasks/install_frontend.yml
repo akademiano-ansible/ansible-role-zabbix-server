@@ -24,3 +24,10 @@
     name: egeneralov.nginx
   vars:
     vhosts: "{{ egeneralov.nginx.vhosts }}"
+
+- name: place config for frontend
+  template:
+    src: zabbix.conf.php.j2
+    dest: /usr/share/zabbix/conf/zabbix.conf.php
+    mode: 0777
+

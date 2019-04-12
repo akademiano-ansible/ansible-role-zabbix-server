@@ -108,7 +108,7 @@ zbx_server_conf:
 egeneralov:
   nginx:
     vhosts:
-      - domain: "{{ groups['zabbix-server'] }}"
+      - domain: "{{ groups['zabbix-server'] | first }}"
         ssl: false
         rewrite_ssl: false
         rewrite_www: false
