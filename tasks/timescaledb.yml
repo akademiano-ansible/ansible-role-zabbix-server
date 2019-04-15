@@ -7,8 +7,6 @@
     pgdg_users: "{{ egeneralov.postgresql.pgdg_users }}"
 
 
-
-
 - name: init postgresql database
   become: true
   become_user: postgres
@@ -57,4 +55,3 @@
   become: true
   become_user: postgres
   with_items: "{{ egeneralov.postgresql.pgdg_users }}"
-

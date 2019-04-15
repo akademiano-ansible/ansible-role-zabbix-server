@@ -30,4 +30,3 @@
     src: zabbix.conf.php.j2
     dest: /usr/share/zabbix/conf/zabbix.conf.php
     mode: 0777
-
