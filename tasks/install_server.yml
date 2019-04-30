@@ -1,17 +1,26 @@
 ---
 
-- name: Install zabbix-server
+- name: "install : zabbix-server"
   apt:
     name:
       - "zabbix-server-{% if zbx_database != 'timescaledb' %}{{ zbx_database }}{% else %}pgsql{% endif %}"
       - zabbix-get
       - zabbix-sender
+      - python-pip
     update_cache: yes
     cache_valid_time: 3600
+  register: zabbix_installation
+
+
+- name: "install : python module for api access"
+  pip:
+    name: zabbix-api
+
 
 - include_tasks: "{{ zbx_database }}.yml"
 
-- name: zabbix_server.conf
+
+- name: "configure : zabbix_server.conf"
   lineinfile:
     path: "/etc/zabbix/zabbix_server.conf"
     regexp: '#?{{ item.k }} =.*'
@@ -20,8 +29,10 @@
   with_items: "{{ zbx_server_conf }}"
   register: zbx_conf
 
-- name: Restart zabbix-server
+
+- name: "(re)start : zabbix-server"
   systemd:
     name: "zabbix-server.service"
-    state: restarted
-  when: zbx_conf is changed or zbx_db is changed
+    state: "{% if zbx_conf.changed or zabbix_installation.changed or zbx_db.changed %}re{% endif %}started"
+    enabled: yes
+    daemon_reload: "{% if zabbix_installation.changed %}yes{% else %}no{% endif %}"
