@@ -22,4 +22,5 @@ galaxy_info:
     - system
 
 dependencies:
-- egeneralov.zabbix_repository
+- egeneralov.zabbix-repository
+- egeneralov.zabbix-agent
