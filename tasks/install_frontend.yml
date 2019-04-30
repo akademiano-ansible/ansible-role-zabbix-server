@@ -5,6 +5,7 @@
     name: apache2
     state: stopped
     enabled: no
+  failed_when: false
 
 - name: Install nginx
   include_role:
