@@ -144,11 +144,11 @@ egeneralov:
       - { "k": "log_errors", "v": "On" }
     pool:
       www:
-        user: "www-data"
-        group: "www-data"
+        user: "nginx"
+        group: "nginx"
         listen: "/run/php/php7.2-fpm.sock"
-        listen.owner: "www-data"
-        listen.group: "www-data"
+        listen.owner: "nginx"
+        listen.group: "nginx"
         listen.mode: "0666"
         pm: "dynamic"
         pm.max_children: "5"
