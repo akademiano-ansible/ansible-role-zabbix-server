@@ -109,7 +109,7 @@ zbx_server_conf:
 egeneralov:
   nginx:
     vhosts:
-      - domain: "{{ groups['zabbix-server'] | first }}"
+      - domain: "{{ ansible_default_ipv4.address }}"
         ssl: false
         rewrite_ssl: false
         rewrite_www: false
@@ -160,9 +160,24 @@ egeneralov:
       - user: zabbix
         password: zabbix
         database: zabbix
+    pgdg_postgresql_conf:
+      - { "k": "listen_addresses", "v": "'127.0.0.1'" }
+      - { "k": "port", "v": "5432" }
+      - { "k": "shared_buffers", "v": "128MB" }
+      - { "k": "effective_cache_size", "v": "512MB" }
+      - { "k": "work_mem", "v": "4MB" }
+      - { "k": "maintenance_work_mem", "v": "128MB" }
+      - { "k": "min_wal_size", "v": "512MB" }
+      - { "k": "max_wal_size", "v": "2GB" }
+      - { "k": "wal_buffers", "v": "4MB" }
+      - { "k": "checkpoint_completion_target", "v": "0.5" }
+
+      - { "k": "max_connections", "v": "100" }
+      - { "k": "random_page_cost", "v": "1.1" }
+      - { "k": "effective_io_concurrency", "v": "200" }
+
 #   timescaledb:
 #     pgdg_users:
 #       - user: zabbix
 #         password: zabbix
 #         database: zabbix
-

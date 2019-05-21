@@ -5,6 +5,7 @@
     name: egeneralov.postgresql
   vars:
     pgdg_users: "{{ egeneralov.postgresql.pgdg_users }}"
+    pgdg_postgresql_conf: "{{ egeneralov.postgresql.pgdg_postgresql_conf }}"
 
 
 - name: init zabbix database
