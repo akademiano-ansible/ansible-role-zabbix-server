@@ -1,13 +1,5 @@
 ---
 
-- name: Install timescaledb
-  include_role:
-    name: egeneralov.timescaledb
-  vars:
-    pgdg_users: "{{ egeneralov.postgresql.pgdg_users }}"
-    pgdg_postgresql_conf: "{{ egeneralov.postgresql.pgdg_postgresql_conf }}"
-
-
 - name: init postgresql database
   become: true
   become_user: postgres

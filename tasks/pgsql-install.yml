@@ -1,0 +1,8 @@
+---
+
+- name: Install postgresql
+  include_role:
+    name: egeneralov.postgresql
+  vars:
+    pgdg_users: "{{ egeneralov.postgresql.pgdg_users }}"
+    pgdg_postgresql_conf: "{{ egeneralov.postgresql.pgdg_postgresql_conf }}"

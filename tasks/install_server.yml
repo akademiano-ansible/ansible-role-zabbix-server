@@ -1,5 +1,8 @@
 ---
 
+- include_tasks: "{{ zbx_database }}-install.yml"
+
+
 - name: "install : zabbix-server"
   apt:
     name:
@@ -17,7 +20,8 @@
     name: zabbix-api
 
 
-- include_tasks: "{{ zbx_database }}.yml"
+- include_tasks: "{{ zbx_database }}-configure.yml"
+
 
 
 - name: "configure : zabbix_server.conf"
