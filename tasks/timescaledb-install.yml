@@ -4,5 +4,5 @@
   include_role:
     name: egeneralov.timescaledb
   vars:
-    pgdg_users: "{{ egeneralov.postgresql.pgdg_users }}"
-    pgdg_postgresql_conf: "{{ egeneralov.postgresql.pgdg_postgresql_conf }}"
+    pgdg_users: "{{ egeneralov.timescaledb.pgdg_users }}"
+    pgdg_postgresql_conf: "{{ egeneralov.timescaledb.pgdg_postgresql_conf }}"

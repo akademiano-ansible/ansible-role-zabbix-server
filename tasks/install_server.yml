@@ -17,11 +17,14 @@
 
 - name: "install : python module for api access"
   pip:
-    name: zabbix-api
+    name:
+      - zabbix-api
+      - py-zabbix
+  retries: 3
+  delay: 5
 
 
 - include_tasks: "{{ zbx_database }}-configure.yml"
-
 
 
 - name: "configure : zabbix_server.conf"

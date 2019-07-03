@@ -25,6 +25,7 @@
     name:
       - "zabbix-frontend-php"
     install_recommends: no
+
 - name: place config for frontend
   template:
     src: zabbix.conf.php.j2

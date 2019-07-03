@@ -4,3 +4,10 @@
 - import_tasks: check.yml
 - import_tasks: install_server.yml
 - import_tasks: install_frontend.yml
+
+- zbx_user_manager:
+    url: "http://{{ egeneralov.nginx.vhosts[0].domain }}/"
+    default_password: "{{ user_manager.default_password | default('zabbix') }}"
+    login_password: "{{ user_manager.login_password }}"
+    users: "{{ user_manager.users }}"
+  when: user_manager.login_password is defined
